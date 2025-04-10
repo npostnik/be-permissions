@@ -1,0 +1,2 @@
+# cat=settings; type=folder; label=Path to where the files should be stored
+targetFolder =

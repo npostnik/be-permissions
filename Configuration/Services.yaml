@@ -1,0 +1,20 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  Np\BePermissions\:
+    resource: '../Classes/*'
+
+  Np\BePermissions\Command\ExportBegroupsCommand:
+    tags:
+      - name: 'console.command'
+        command: 'begroups:export'
+        description: 'Export BE groups in yaml files'
+
+  Np\BePermissions\Command\ImportBegroupsCommand:
+    tags:
+      - name: 'console.command'
+        command: 'begroups:import'
+        description: 'Import BE groups from yaml files'
