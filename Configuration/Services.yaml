@@ -4,16 +4,16 @@ services:
     autoconfigure: true
     public: false
 
-  Np\BePermissions\:
+  Npostnik\BePermissions\:
     resource: '../Classes/*'
 
-  Np\BePermissions\Command\ExportBegroupsCommand:
+  Npostnik\BePermissions\Command\ExportBegroupsCommand:
     tags:
       - name: 'console.command'
         command: 'begroups:export'
         description: 'Export BE groups in yaml files'
 
-  Np\BePermissions\Command\ImportBegroupsCommand:
+  Npostnik\BePermissions\Command\ImportBegroupsCommand:
     tags:
       - name: 'console.command'
         command: 'begroups:import'

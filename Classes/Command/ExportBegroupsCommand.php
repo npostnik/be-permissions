@@ -1,6 +1,6 @@
 <?php
 
-namespace Np\BePermissions\Command;
+namespace Npostnik\BePermissions\Command;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;

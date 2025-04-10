@@ -1,5 +1,5 @@
 {
-    "name": "np/be-permissions",
+    "name": "npostnik/be-permissions",
     "type": "typo3-cms-extension",
     "description": "Export/import BE group permissions in files",
     "version": "v12.0.0",
@@ -14,7 +14,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Np\\BePermissions\\": "Classes"
+            "Npostnik\\BePermissions\\": "Classes"
         }
     },
     "extra": {
