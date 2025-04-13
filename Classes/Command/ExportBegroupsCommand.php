@@ -22,12 +22,19 @@ class ExportBegroupsCommand extends Command
         return Command::SUCCESS;
     }
 
+    /**
+     * @param OutputInterface $output
+     * @return int|void
+     * @throws \Doctrine\DBAL\Exception
+     * @throws \TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException
+     * @throws \TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException
+     */
     protected function exportBeGroups($output)
     {
         $targetFolder = GeneralUtility::makeInstance(ExtensionConfiguration::class)
             ->get('be_permissions', 'targetFolder');
         if (empty($targetFolder)) {
-            $output->errln('targetFolder is empty');
+            $output->writeLn('targetFolder is empty');
             return Command::FAILURE;
         }
 
