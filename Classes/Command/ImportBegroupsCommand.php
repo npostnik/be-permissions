@@ -15,7 +15,7 @@ use TYPO3\CMS\Core\Database\ConnectionPool;
 class ImportBegroupsCommand extends Command
 {
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->importBegroups($output);
 
