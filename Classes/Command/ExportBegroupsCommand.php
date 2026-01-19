@@ -2,13 +2,14 @@
 
 namespace Npostnik\BePermissions\Command;
 
+use Doctrine\DBAL\Exception;
+use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
+use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Yaml\Yaml;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
-use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 
@@ -24,10 +25,10 @@ class ExportBegroupsCommand extends Command
 
     /**
      * @param OutputInterface $output
-     * @return int|void
-     * @throws \Doctrine\DBAL\Exception
-     * @throws \TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException
-     * @throws \TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException
+     * @return int|null
+     * @throws Exception
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
      */
     protected function exportBeGroups($output)
     {
@@ -57,6 +58,7 @@ class ExportBegroupsCommand extends Command
             file_put_contents($filename, $yaml);
             $output->writeLn(sprintf('The permissions for "%s" are written to: %s', $group['title'], $filename));
         }
+        return null;
     }
 
     protected function normalizeTitle($title)

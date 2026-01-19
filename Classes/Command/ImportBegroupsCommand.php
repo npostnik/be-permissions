@@ -2,8 +2,9 @@
 
 namespace Npostnik\BePermissions\Command;
 
+use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
+use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Yaml\Yaml;
@@ -24,9 +25,9 @@ class ImportBegroupsCommand extends Command
 
     /**
      * @param OutputInterface $output
-     * @return int|void
-     * @throws \TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException
-     * @throws \TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException
+     * @return int|null
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
      */
     protected function importBegroups($output)
     {
@@ -39,7 +40,7 @@ class ImportBegroupsCommand extends Command
 
         $targetFolder = GeneralUtility::getFileAbsFileName($targetFolder);
 
-        $files = array_diff(scandir($targetFolder), array('..', '.'));
+        $files = array_diff(scandir($targetFolder), ['..', '.']);
 
         $existingBegroup = $this->getExistingGroups();
 
@@ -54,6 +55,7 @@ class ImportBegroupsCommand extends Command
                 $output->writeLn(sprintf('Insert permissions for "%s" from %s', $groupData['title'], $file));
             }
         }
+        return null;
     }
 
     protected function getExistingGroups(): array
