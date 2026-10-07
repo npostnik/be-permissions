@@ -94,7 +94,34 @@ class ImportBegroupsCommand extends Command
             }
             $queryBuilder->set($key, $value);
         }
+        // The export omits empty fields, so fields missing in the file have to be cleared explicitly
+        foreach ($this->getClearableFields() as $field) {
+            if (!array_key_exists($field, $groupData)) {
+                $queryBuilder->set($field, '');
+            }
+        }
         $queryBuilder->executeStatement();
+    }
+
+    /**
+     * List/text columns of be_groups that the export leaves out when empty.
+     */
+    protected function getClearableFields(): array
+    {
+        $fields = [
+            'non_exclude_fields', 'explicit_allowdeny', 'allowed_languages', 'custom_options',
+            'db_mountpoints', 'pagetypes_select', 'tables_select', 'tables_modify', 'groupMods',
+            'file_mountpoints', 'file_permissions', 'category_perms', 'availableWidgets',
+            'mfa_providers', 'TSconfig', 'description', 'subgroup',
+        ];
+        $columns = GeneralUtility::makeInstance(ConnectionPool::class)
+            ->getConnectionForTable('be_groups')
+            ->createSchemaManager()
+            ->introspectTable('be_groups')
+            ->getColumns();
+        $existing = array_map(static fn($column) => $column->getName(), $columns);
+
+        return array_values(array_intersect($fields, $existing));
     }
 
     protected function insertBegroup($groupData)
