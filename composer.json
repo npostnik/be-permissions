@@ -2,7 +2,7 @@
     "name": "npostnik/be-permissions",
     "type": "typo3-cms-extension",
     "description": "Export/import BE group permissions in files",
-    "version": "v13.0.0",
+    "version": "v13.1.0",
     "authors": [
         {
             "name": "Natalia Postnikova",
