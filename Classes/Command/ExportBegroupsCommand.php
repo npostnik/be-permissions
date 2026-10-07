@@ -54,11 +54,39 @@ class ExportBegroupsCommand extends Command
         foreach ($groups as $group) {
             $title = $this->normalizeTitle($group['title']);
             $filename = $targetFolder . $group['uid'] . '-' . $title . '.yaml';
+            $this->renameExistingFile($targetFolder, (int)$group['uid'], $filename, $output);
             $yaml = Yaml::dump($this->prepareForExport($group), 6);
             file_put_contents($filename, $yaml);
             $output->writeLn(sprintf('The permissions for "%s" are written to: %s', $group['title'], $filename));
         }
         return null;
+    }
+
+    /**
+     * Renames an already exported file with the same uid prefix (e.g. after a title change)
+     * to the new filename, so that it is overwritten instead of duplicated.
+     */
+    protected function renameExistingFile(string $targetFolder, int $uid, string $newFilename, OutputInterface $output): void
+    {
+        // The trailing dash prevents uid 1 from matching "10-*.yaml"
+        $existingFiles = glob($targetFolder . $uid . '-*.yaml') ?: [];
+        $existingFiles = array_values(array_diff($existingFiles, [$newFilename]));
+        if ($existingFiles === []) {
+            return;
+        }
+
+        if (file_exists($newFilename)) {
+            $output->writeLn(sprintf('<comment>Skipped renaming, target already exists: %s</comment>', $newFilename));
+            return;
+        }
+
+        $oldFilename = array_shift($existingFiles);
+        rename($oldFilename, $newFilename);
+        $output->writeLn(sprintf('Renamed %s to %s', basename($oldFilename), basename($newFilename)));
+
+        foreach ($existingFiles as $duplicate) {
+            $output->writeLn(sprintf('<comment>Further file with the same id left untouched: %s</comment>', basename($duplicate)));
+        }
     }
 
     protected function normalizeTitle($title)
